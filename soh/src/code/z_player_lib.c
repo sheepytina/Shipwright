@@ -2399,7 +2399,20 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
             OPEN_DISPS(play->state.gfxCtx);
 
             Matrix_Push();
-            Matrix_Translate(stringData->pos.x, stringData->pos.y, stringData->pos.z, MTXMODE_APPLY);
+            // child bow. currently unused as it causes the bow string to not pull for no comprehendable reason
+            //
+            // if (CVarGetInteger("gAltLinkEquip", 1) && !LINK_IS_ADULT && this->itemAction != PLAYER_IA_SLINGSHOT) {
+            //    Matrix_Translate(stringData->pos.x / 1.35f, stringData->pos.y / 1.35f,
+            //        stringData->pos.z / 1.35f, MTXMODE_APPLY);
+            // }
+            //
+            // adult slingshot
+            if (CVarGetInteger("gAltLinkEquip", 1) && LINK_IS_ADULT && this->itemAction == PLAYER_IA_SLINGSHOT) {
+                Matrix_Translate(stringData->pos.x * 1.35f, stringData->pos.y * 1.35f, stringData->pos.z * 1.35f,
+                                 MTXMODE_APPLY);
+            } else {
+                Matrix_Translate(stringData->pos.x, stringData->pos.y, stringData->pos.z, MTXMODE_APPLY);
+            }
 
             if ((this->stateFlags1 & 0x200) && (this->unk_860 >= 0) && (this->unk_834 <= 10)) {
                 Vec3f sp90;
@@ -2420,15 +2433,21 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
                 this->unk_85C = -0.5f;
             }
+            // child bow
+            if (CVarGetInteger("gAltLinkEquip", 1) && !LINK_IS_ADULT && this->itemAction != PLAYER_IA_SLINGSHOT) {
+                Matrix_Scale(1.0f / 1.35f, this->unk_858 / 1.35f, 1.0f / 1.35f, MTXMODE_APPLY);
+                // adult slingshot
+            } else if (CVarGetInteger("gAltLinkEquip", 1) && LINK_IS_ADULT && this->itemAction == PLAYER_IA_SLINGSHOT) {
+                Matrix_Scale(1.35f, this->unk_858 * 1.35f, 1.35f, MTXMODE_APPLY);
+            } else {
+                Matrix_Scale(1.0f, this->unk_858, 1.0f, MTXMODE_APPLY);
+            }
 
-            Matrix_Scale(1.0f, this->unk_858, 1.0f, MTXMODE_APPLY);
-
-            if (!LINK_IS_ADULT) {
+            if (this->itemAction == PLAYER_IA_SLINGSHOT) {
                 Matrix_RotateZ(this->unk_858 * -0.2f, MTXMODE_APPLY);
             }
 
-            gSPMatrix(POLY_XLU_DISP++, MATRIX_NEWMTX(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, MATRIX_NEWMTX(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, stringData->dList);
 
             Matrix_Pop();
