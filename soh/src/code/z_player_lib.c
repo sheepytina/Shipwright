@@ -2250,20 +2250,6 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPMatrix(POLY_XLU_DISP++, MATRIX_NEWMTX(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, sBottleDLists[(gSaveContext.linkAge)]);
-
-            CLOSE_DISPS(play->state.gfxCtx);
-        }
-
-        // AltEquip TODO: A problematic change to the original code was made here.
-        if ((*dList != NULL) && (this->leftHandType == 7)) {
-            Color_RGB8* bottleColor = &sBottleColors[Player_ActionToBottle(this, this->itemAction)];
-
-            OPEN_DISPS(play->state.gfxCtx);
-
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
 
             if (this->itemAction != PLAYER_IA_BOTTLE && Player_CanUseNewLoadingMethodLeftHand(this)) {
