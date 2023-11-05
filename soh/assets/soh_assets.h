@@ -80,14 +80,8 @@ static const ALIGN_ASSET(2) char gLinkHookshotDL[] = dgLinkHookshotDL;
 #define dgLinkHookshotTipDL "__OTR__objects/object_link_eq/gLinkHookshotTipDL"
 static const ALIGN_ASSET(2) char gLinkHookshotTipDL[] = dgLinkHookshotTipDL;
 
-#define dgLinkHookshotSmallTipDL "__OTR__objects/object_link_eq/gLinkHookshotSmallTipDL"
-static const ALIGN_ASSET(2) char gLinkHookshotSmallTipDL[] = dgLinkHookshotSmallTipDL;
-
 #define dgLinkHookshotChainDL "__OTR__objects/object_link_eq/gLinkHookshotChainDL"
 static const ALIGN_ASSET(2) char gLinkHookshotChainDL[] = dgLinkHookshotChainDL;
-
-#define dgLinkHookshotSmallChainDL "__OTR__objects/object_link_eq/gLinkHookshotSmallChainDL"
-static const ALIGN_ASSET(2) char gLinkHookshotSmallChainDL[] = dgLinkHookshotSmallChainDL;
 
 #define dgLinkSlingshotDL "__OTR__objects/object_link_eq/gLinkSlingshotDL"
 static const ALIGN_ASSET(2) char gLinkSlingshotDL[] = dgLinkSlingshotDL;
