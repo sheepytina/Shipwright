@@ -2328,40 +2328,18 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
                             // Item is Slingshot
                             if (projectedHeadPos.z < -4.0f && this->unk_6AD != 0) {
                                 if (Player_CanUseNewLoadingMethodFirstPerson(this)) {
-                                    OPEN_DISPS(play->state.gfxCtx);
-
-                                    // rescale child items for adult, otherwise clipping occurs
-                                    if (LINK_IS_ADULT) {
-                                        Matrix_Scale(1.35f, 1.35f, 1.35f, MTXMODE_APPLY);
-                                    }
-
-                                    gSPMatrix(POLY_OPA_DISP++, MATRIX_NEWMTX(play->state.gfxCtx),
-                                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                                    gSPDisplayList(POLY_OPA_DISP++, gLinkSlingshotDL);
-
-                                    CLOSE_DISPS(play->state.gfxCtx);
+                                    Player_DrawChildItem(play, gLinkSlingshotDL);
                                 }
                             } else {
-                                OPEN_DISPS(play->state.gfxCtx);
-
-                                // rescale child items for adult, otherwise clipping occurs
-                                if (LINK_IS_ADULT) {
-                                    Matrix_Scale(1.35f, 1.35f, 1.35f, MTXMODE_APPLY);
-                                }
-
-                                gSPMatrix(POLY_OPA_DISP++, MATRIX_NEWMTX(play->state.gfxCtx),
-                                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                                gSPDisplayList(POLY_OPA_DISP++, gLinkSlingshotDL);
-
-                                CLOSE_DISPS(play->state.gfxCtx);
+                                Player_DrawChildItem(play, gLinkSlingshotDL);
                             }
                         } else { // Item is Bow
                             if (projectedHeadPos.z < 0.0f && this->unk_6AD != 0) {
                                 if (Player_CanUseNewLoadingMethodFirstPerson(this)) {
-                                    Player_DrawRightHandItem(play, gLinkBowDL);
+                                    Player_DrawAdultItem(play, gLinkBowDL);
                                 }
                             } else {
-                                Player_DrawRightHandItem(play, gLinkBowDL);
+                                Player_DrawAdultItem(play, gLinkBowDL);
                             }
                         }
                         break;
@@ -2399,13 +2377,11 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
             OPEN_DISPS(play->state.gfxCtx);
 
             Matrix_Push();
-            // child bow. currently unused as it causes the bow string to not pull for no comprehendable reason
-            //
-            // if (CVarGetInteger("gAltLinkEquip", 1) && !LINK_IS_ADULT && this->itemAction != PLAYER_IA_SLINGSHOT) {
-            //    Matrix_Translate(stringData->pos.x / 1.35f, stringData->pos.y / 1.35f,
-            //        stringData->pos.z / 1.35f, MTXMODE_APPLY);
-            // }
-            //
+            // child bow. pos.y isn't scaled as this apparently moves the bowstring juuuust enough that it breaks
+             if (CVarGetInteger("gAltLinkEquip", 1) && !LINK_IS_ADULT && this->itemAction != PLAYER_IA_SLINGSHOT) {
+                Matrix_Translate(stringData->pos.x / 1.35f, stringData->pos.y,
+                    stringData->pos.z / 1.35f, MTXMODE_APPLY);
+             } else
             // adult slingshot
             if (CVarGetInteger("gAltLinkEquip", 1) && LINK_IS_ADULT && this->itemAction == PLAYER_IA_SLINGSHOT) {
                 Matrix_Translate(stringData->pos.x * 1.35f, stringData->pos.y * 1.35f, stringData->pos.z * 1.35f,
@@ -2413,8 +2389,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
             } else {
                 Matrix_Translate(stringData->pos.x, stringData->pos.y, stringData->pos.z, MTXMODE_APPLY);
             }
-
-            if ((this->stateFlags1 & 0x200) && (this->unk_860 >= 0) && (this->unk_834 <= 10)) {
+             if ((this->stateFlags1 & 0x200) && (this->unk_860 >= 0) && (this->unk_834 <= 10)) {
                 Vec3f sp90;
                 f32 distXYZ;
 

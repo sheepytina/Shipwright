@@ -138,7 +138,7 @@ s32 func_80834A2C(Player* this, PlayState* play);
 s32 func_80834B5C(Player* this, PlayState* play);
 s32 func_80834C74(Player* this, PlayState* play);
 s32 func_8083501C(Player* this, PlayState* play);
-s32 func_808351D4(Player* this, PlayState* play); // Arrow nocked
+s32 Player_PrepareBowHookshot(Player* this, PlayState* play); // Arrow nocked
 s32 func_808353D8(Player* this, PlayState* play); // Aiming in first person
 s32 func_80835588(Player* this, PlayState* play);
 s32 func_808356E8(Player* this, PlayState* play);
@@ -2192,7 +2192,7 @@ void func_80834298(Player* this, PlayState* play) {
 }
 
 // Determine projectile type for bow or slingshot
-s32 func_80834380(PlayState* play, Player* this, s32* itemPtr, s32* typePtr) {
+s32 Player_DetermineArrowType(PlayState* play, Player* this, s32* itemPtr, s32* typePtr) {
     bool useBow = LINK_IS_ADULT;
     if(CVarGetInteger("gBowSlingShotAmmoFix", 0)){
         useBow = this->heldItemAction != PLAYER_IA_SLINGSHOT;
@@ -2219,7 +2219,7 @@ s32 func_80834380(PlayState* play, Player* this, s32* itemPtr, s32* typePtr) {
 }
 
 // The player has pressed the bow or hookshot button
-s32 func_8083442C(Player* this, PlayState* play) {
+s32 Player_UseBowHookshot(Player* this, PlayState* play) {
     s32 item;
     s32 arrowType;
     s32 magicArrowType;
@@ -2228,7 +2228,7 @@ s32 func_8083442C(Player* this, PlayState* play) {
         (gSaveContext.magicState != MAGIC_STATE_IDLE)) {
         func_80078884(NA_SE_SY_ERROR);
     } else {
-        func_80833638(this, func_808351D4);
+        func_80833638(this, Player_PrepareBowHookshot);
 
         this->stateFlags1 |= PLAYER_STATE1_READY_TO_FIRE;
         this->unk_834 = 14;
@@ -2236,7 +2236,7 @@ s32 func_8083442C(Player* this, PlayState* play) {
         if (this->unk_860 >= 0) {
             Player_PlaySfx(&this->actor, D_80854398[ABS(this->unk_860) - 1]);
 
-            if (!Player_HoldsHookshot(this) && (func_80834380(play, this, &item, &arrowType) > 0)) {
+            if (!Player_HoldsHookshot(this) && (Player_DetermineArrowType(play, this, &item, &arrowType) > 0)) {
                 magicArrowType = arrowType - ARROW_FIRE;
 
                 if (this->unk_860 >= 0) {
@@ -2442,7 +2442,7 @@ s32 func_80834D2C(Player* this, PlayState* play) {
     LinkAnimationHeader* anim;
 
     if (this->heldItemAction != PLAYER_IA_BOOMERANG) {
-        if (!func_8083442C(this, play)) {
+        if (!Player_UseBowHookshot(this, play)) {
             return 0;
         }
 
@@ -2539,7 +2539,7 @@ s32 func_808350A4(PlayState* play, Player* this) {
 
     if (this->heldActor != NULL) {
         if (!Player_HoldsHookshot(this)) {
-            func_80834380(play, this, &item, &arrowType);
+            Player_DetermineArrowType(play, this, &item, &arrowType);
 
             if (gSaveContext.minigameState == 1) {
                 if (!CVarGetInteger("gInfiniteAmmo", 0)) {
@@ -2575,13 +2575,13 @@ s32 func_808350A4(PlayState* play, Player* this) {
 
 static u16 D_808543DC[] = { NA_SE_IT_BOW_FLICK, NA_SE_IT_SLING_FLICK };
 
-s32 func_808351D4(Player* this, PlayState* play) {
-    s32 sp2C;
+s32 Player_PrepareBowHookshot(Player* this, PlayState* play) {
+    s32 isHookshot;
 
     if (!Player_HoldsHookshot(this)) {
-        sp2C = 0;
+        isHookshot = 0;
     } else {
-        sp2C = 1;
+        isHookshot = 1;
     }
 
     Math_ScaledStepToS(&this->unk_6C0, 1200, 400);
@@ -2589,10 +2589,10 @@ s32 func_808351D4(Player* this, PlayState* play) {
 
     if ((this->unk_836 == 0) && (func_80833350(this) == 0) &&
         (this->skelAnime.animation == &gPlayerAnim_link_bow_side_walk)) {
-        LinkAnimation_PlayOnce(play, &this->skelAnime2, D_808543CC[sp2C]);
+        LinkAnimation_PlayOnce(play, &this->skelAnime2, D_808543CC[isHookshot]);
         this->unk_836 = -1;
     } else if (LinkAnimation_Update(play, &this->skelAnime2)) {
-        LinkAnimation_PlayLoop(play, &this->skelAnime2, D_808543D4[sp2C]);
+        LinkAnimation_PlayLoop(play, &this->skelAnime2, D_808543D4[isHookshot]);
         this->unk_836 = 1;
     } else if (this->unk_836 == 1) {
         this->unk_836 = 2;
@@ -2607,7 +2607,7 @@ s32 func_808351D4(Player* this, PlayState* play) {
     if ((this->unk_836 > 0) && ((this->unk_860 < 0) || (!D_80853618 && !func_80834E7C(play)))) {
         func_80833638(this, func_808353D8);
         if (this->unk_860 >= 0) {
-            if (sp2C == 0) {
+            if (isHookshot == 0) {
                 if (!func_808350A4(play, this)) {
                     Player_PlaySfx(&this->actor, D_808543DC[ABS(this->unk_860) - 1]);
                 }
@@ -2635,7 +2635,7 @@ s32 func_808353D8(Player* this, PlayState* play) {
         (D_80853614 || ((this->unk_860 < 0) && D_80853618) || func_80834E44(play))) {
         this->unk_860 = ABS(this->unk_860);
 
-        if (func_8083442C(this, play)) {
+        if (Player_UseBowHookshot(this, play)) {
             if (Player_HoldsHookshot(this)) {
                 this->unk_836 = 1;
             } else {
