@@ -2347,10 +2347,19 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList, Ve
                     case PLAYER_MODELTYPE_RH_HOOKSHOT: // Right hand is holding Hookshot
                         if (projectedHeadPos.z < 0.0f && this->unk_6AD != 0) {
                             if (Player_CanUseNewLoadingMethodFirstPerson(this)) {
-                                Player_DrawRightHandItem(play, gLinkHookshotDL);
+                                if (this->itemAction == PLAYER_IA_LONGSHOT &&
+                                    ResourceGetIsCustomByName(gLinkLongshotDL)) {
+                                    Player_DrawRightHandItem(play, gLinkLongshotDL);
+                                } else {
+                                    Player_DrawRightHandItem(play, gLinkHookshotDL);
+                                }
                             }
                         } else {
-                            Player_DrawRightHandItem(play, gLinkHookshotDL);
+                            if (this->itemAction == PLAYER_IA_LONGSHOT && ResourceGetIsCustomByName(gLinkLongshotDL)) {
+                                Player_DrawRightHandItem(play, gLinkLongshotDL);
+                            } else {
+                                Player_DrawRightHandItem(play, gLinkHookshotDL);
+                            }
                         }
                         break;
                 }
