@@ -1,3 +1,15 @@
+## GLES-compatibility playtest branch for (unspecified single-board ARM computer)
+
+This branch is based on SoH MacReady Charlie and a bespoke LUS 1.x branch that cherrypicks Waterdish's "Basic Android Support" PR, and a few other little odds and ends.
+
+It served as the basis for a porting project for certain niche embedded device, helmed by a particular individual who was too lazy to do this work themselves and has done nothing but act in a childish and completely disrespectful way toward the SoH development team and HM64 Discord server staff. 
+
+If this "classic port" in question ever actually materialises and the instructions for installing it on your device are completely obtuse and not like any official release of SoH, you can blame their complete refusal learn how to do things properly because they're "too smart to waste their time learning" or whatever they said. If they had been willing to collaborate, this wouldn't have happened and things would have been much easier for users.
+
+If you want an actual port to said device done properly, please get in touch. You can pull request to this branch with any required changes. I'll be more than happy to help.
+
+## Original README.md to follow
+
 ![Ship of Harkinian](docs/shiptitle.darkmode.png#gh-dark-mode-only)
 ![Ship of Harkinian](docs/shiptitle.lightmode.png#gh-light-mode-only)
 
