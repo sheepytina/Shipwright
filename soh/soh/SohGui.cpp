@@ -41,6 +41,7 @@
 #include "Enhancements/game-interactor/GameInteractor.h"
 #include "Enhancements/cosmetics/authenticGfxPatches.h"
 #include "Enhancements/resolution-editor/ResolutionEditor.h"
+#include "Enhancements/TinaSpecialParameterWindow.h"
 
 bool ToggleAltAssetsAtEndOfFrame = false;
 bool isBetaQuestEnabled = false;
@@ -133,6 +134,8 @@ namespace SohGui {
 
     std::shared_ptr<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow> mAdvancedResolutionSettingsWindow;
 
+    std::shared_ptr<TinaSpecialParameters::TinaSpecialParameterWindow> mTinaSpecialParameterWindow;
+
     void SetupGuiElements() {
         auto gui = LUS::Context::GetInstance()->GetWindow()->GetGui();
 
@@ -194,6 +197,9 @@ namespace SohGui {
         gui->AddGuiWindow(mRandomizerSettingsWindow);
         mAdvancedResolutionSettingsWindow = std::make_shared<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow>("gAdvancedResolutionEditorEnabled", "Advanced Resolution Settings");
         gui->AddGuiWindow(mAdvancedResolutionSettingsWindow);
+
+        mTinaSpecialParameterWindow = std::make_shared<TinaSpecialParameters::TinaSpecialParameterWindow>("gTinaSpecialParametersEnabled", "TinaSpecialParameterWindow");
+        gui->AddGuiWindow(mTinaSpecialParameterWindow);
     }
 
     void Destroy() {
@@ -217,5 +223,7 @@ namespace SohGui {
         mStatsWindow = nullptr;
         mConsoleWindow = nullptr;
         mSohMenuBar = nullptr;
+
+        mTinaSpecialParameterWindow = nullptr;
     }
 }
