@@ -34,6 +34,7 @@
 #include "Enhancements/randomizer/randomizer_item_tracker.h"
 #include "Enhancements/randomizer/randomizer_settings_window.h"
 #include "Enhancements/resolution-editor/ResolutionEditor.h"
+#include "Enhancements/TinaSpecialParameterWindow.h"
 
 extern bool ToggleAltAssetsAtEndOfFrame;
 extern bool isBetaQuestEnabled;
@@ -163,6 +164,7 @@ void DrawShipMenu() {
                             )) {
             std::reinterpret_pointer_cast<LUS::ConsoleWindow>(LUS::Context::GetInstance()->GetWindow()->GetGui()->GetGuiWindow("Console"))->Dispatch("reset");
         }
+
 #if !defined(__SWITCH__) && !defined(__WIIU__)
         UIWidgets::Spacer(0);
         if (ImGui::MenuItem("Open App Files Folder")) {
@@ -182,10 +184,17 @@ void DrawShipMenu() {
 extern std::shared_ptr<LUS::GuiWindow> mInputEditorWindow;
 extern std::shared_ptr<GameControlEditor::GameControlEditorWindow> mGameControlEditorWindow;
 extern std::shared_ptr<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow> mAdvancedResolutionSettingsWindow;
+extern std::shared_ptr<TinaSpecialParameters::TinaSpecialParameterWindow> mTinaSpecialParameterWindow;
 
 void DrawSettingsMenu() {
-    if (ImGui::BeginMenu("Settings"))
-    {
+    if (ImGui::BeginMenu("Settings")) {
+
+        UIWidgets::Spacer(0);
+        if (ImGui::MenuItem("TinaSpecialParameterWindow")) {
+            mTinaSpecialParameterWindow->ToggleVisibility();
+        }
+        UIWidgets::Spacer(0);
+
         if (ImGui::BeginMenu("Audio")) {
             UIWidgets::PaddedEnhancementSliderFloat("Master Volume: %d %%", "##Master_Vol", "gGameMasterVolume", 0.0f, 1.0f, "", 1.0f, true, true, false, true);
             if (UIWidgets::PaddedEnhancementSliderFloat("Main Music Volume: %d %%", "##Main_Music_Vol", "gMainMusicVolume", 0.0f, 1.0f, "", 1.0f, true, true, false, true)) {
