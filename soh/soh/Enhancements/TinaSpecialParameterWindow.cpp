@@ -21,7 +21,20 @@ void TinaSpecialParameterWindow::InitElement() {
 void TinaSpecialParameterWindow::DrawElement() {
     ImGui::SetNextWindowSize(ImVec2(497, 599), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("TinaSpecialParameterWindow", &mIsVisible)) {
-        
+
+        static float aspectRatioX = CVarGetFloat("gDifferentHUDAspect.AspectRatioX", 4.0f);
+        static float aspectRatioY = CVarGetFloat("gDifferentHUDAspect.AspectRatioY", 3.0f);
+
+        UIWidgets::PaddedEnhancementCheckbox("gDifferentHUDAspect.Enabled", "gDifferentHUDAspect.Enabled", false, false, false, "", UIWidgets::CheckboxGraphics::Cross, false);
+
+        if (ImGui::InputFloat("X", &aspectRatioX, 0.1f, 1.0f, "%.3f")) {
+            CVarSetFloat("gDifferentHUDAspect.AspectRatioX", aspectRatioX);
+            CVarSave();
+        }
+        if (ImGui::InputFloat("Y", &aspectRatioY, 0.1f, 1.0f, "%.3f")) {
+            CVarSetFloat("gDifferentHUDAspect.AspectRatioY", aspectRatioY);
+            CVarSave();
+        }
     }
     ImGui::End();
 }
