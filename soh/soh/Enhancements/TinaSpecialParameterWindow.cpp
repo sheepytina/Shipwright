@@ -24,6 +24,13 @@ void TinaSpecialParameterWindow::DrawElement() {
     if (ImGui::Begin("TinaSpecialParameterWindow", &mIsVisible)) {
         static float aspectRatioX = CVarGetFloat("gDifferentHUDAspect.AspectRatioX", 4.0f);
         static float aspectRatioY = CVarGetFloat("gDifferentHUDAspect.AspectRatioY", 3.0f);
+        static int safeZone = CVarGetInteger("gDifferentHUDAspect.SafeZone", 10);
+        
+        if (ImGui::InputInt("Safe Zone", &safeZone, 1, 10)) {
+            CVarSetInteger("gDifferentHUDAspect.SafeZone", safeZone);
+            CVarSave();
+        }
+        UIWidgets::Spacer(0);
 
         // UIWidgets::PaddedEnhancementCheckbox("gDifferentHUDAspect.Enabled", "gDifferentHUDAspect.Enabled", false, false, false, "", UIWidgets::CheckboxGraphics::Cross, false);
 
@@ -42,11 +49,11 @@ void TinaSpecialParameterWindow::DrawElement() {
             ImGui::Text("Difference: %.2f", difference);
         }
         if (ImGui::Button("Apply difference to current margins")) {
-            short margin = round(100 * difference);
-            // gHUDMargin_T
-            CVarSetInteger("gHUDMargin_L", margin); // gHUDMargin_L
-            CVarSetInteger("gHUDMargin_R", -margin); // gHUDMargin_R
-            // gHUDMargin_B
+            short margin = round(100 * difference) - safeZone;
+            CVarSetInteger("gHUDMargin_T", safeZone); // gHUDMargin_T
+            CVarSetInteger("gHUDMargin_L", margin);   // gHUDMargin_L
+            CVarSetInteger("gHUDMargin_R", -margin);  // gHUDMargin_R
+            CVarSetInteger("gHUDMargin_B", safeZone); // gHUDMargin_B
         }
         ImGui::Text("(You'll need to enable margins in Cosmetics Editor.)");
     }
