@@ -2226,6 +2226,10 @@ extern "C" void OTRControllerCallback(uint8_t rumble) {
 }
 
 extern "C" float OTRGetAspectRatio() {
+    if (CVarGetInteger("gDifferentHUDAspect.Enabled", 0)) {
+        return CVarGetFloat("gDifferentHUDAspect.AspectRatioX", 4.0f) /
+               CVarGetFloat("gDifferentHUDAspect.AspectRatioY", 3.0f);
+    }
     return gfx_current_dimensions.aspect_ratio;
 }
 
