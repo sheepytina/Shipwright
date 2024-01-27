@@ -304,11 +304,12 @@ void DrawSettingsMenu() {
         #endif
 
             UIWidgets::PaddedSeparator(true, true, 3.0f, 3.0f);
-            { // FPS Slider
+            { // Begin FPS Slider
                 const int minFps = 20;
                 static int maxFps;
                 if (LUS::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
-                    maxFps = 360;
+                    maxFps = LUS::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
+                    if (maxFps > 360) { maxFps = 360; } // Magic number
                 } else {
                     maxFps = LUS::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
                 }
@@ -380,20 +381,11 @@ void DrawSettingsMenu() {
                     (currentFps == 20) ? "Framerate: Original (20 fps)" : "Framerate: %d fps",
                     "##FPSInterpolation", "gInterpolationFPS", minFps, maxFps, "", 20, true, true, false, matchingRefreshRate);
             #endif
-                if (LUS::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
-                    UIWidgets::Tooltip(
-                        "Uses Matrix Interpolation to create extra frames, resulting in smoother graphics.\n"
-                        "This is purely visual and does not impact game logic, execution of glitches etc.\n"
-                        "Higher FPS settings may impact CPU performance."
-                        "\n\n " ICON_FA_INFO_CIRCLE 
-                        " There is no need to set this above your monitor's refresh rate. Doing so will waste resources and may give a worse result.");
-                } else {
-                    UIWidgets::Tooltip(
-                        "Uses Matrix Interpolation to create extra frames, resulting in smoother graphics.\n"
-                        "This is purely visual and does not impact game logic, execution of glitches etc.\n"
-                        "Higher FPS settings may impact CPU performance.");
-                }
-            } // END FPS Slider
+                UIWidgets::Tooltip("Increase frame rate during gameplay, above the original game's 20fps. (Won't affect certain menus.)\n\n"
+                                   "Uses Matrix Interpolation to create extra frames, resulting in smoother motion.\n"
+                                   "This is purely visual and does not impact game logic, execution of glitches, etc.\n"
+                                   "Higher FPS settings may impact CPU performance.");
+            } // End FPS Slider
 
             if (LUS::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
                 UIWidgets::Spacer(0);
