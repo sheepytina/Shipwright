@@ -315,9 +315,8 @@ void DrawSettingsMenu() {
             { // Begin FPS Slider
                 const int minFps = 20;
                 static int maxFps;
-                if (LUS::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
-                    maxFps = LUS::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
-                    if (maxFps > 360) { maxFps = 360; } // Magic number
+                if (CVarGetInteger("gDirectXFPSLimit", 0) && LUS ::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
+                    maxFps = 360; // Magic number
                 } else {
                     maxFps = LUS::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
                 }
@@ -396,10 +395,13 @@ void DrawSettingsMenu() {
             } // End FPS Slider
 
             if (LUS::Context::GetInstance()->GetWindow()->GetWindowBackend() == LUS::WindowBackend::DX11) {
-                UIWidgets::Spacer(0);
+                UIWidgets::PaddedEnhancementCheckbox("Allow FPS above refresh rate", "gDirectXFPSLimit", true, true);
+                UIWidgets::Tooltip("Compatibility setting.\n " ICON_FA_INFO_CIRCLE
+                                   " There is no need to set FPS above your monitor's refresh rate. Doing so will waste resources and may give a worse result.");
                 if (ImGui::Button("Match FPS to Refresh Rate")) {
                     int hz = LUS::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
                     if (hz >= 20 && hz <= 360) {
+                        CVarSetInteger("gDirectXFPSLimit", 1);
                         CVarSetInteger("gInterpolationFPS", hz);
                         LUS::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
                     }
