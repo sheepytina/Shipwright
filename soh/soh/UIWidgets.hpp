@@ -17,6 +17,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 #include <ImGui/imgui.h>
+#include "soh/JSONify.h"
 
 namespace UIWidgets {
 
@@ -53,6 +54,9 @@ namespace UIWidgets {
 #else
     constexpr float sliderButtonWidth = 30.0f;
 #endif
+
+    using jsonify = JSONify::JSONifyClass;
+    extern jsonify Locale;
 
     char* WrappedText(const char* text, unsigned int charactersPerLine = 60);
     char* WrappedText(const std::string& text, unsigned int charactersPerLine);
@@ -100,6 +104,8 @@ namespace UIWidgets {
     void DrawFlagArray16(const std::string& name, uint16_t& flags);
     void DrawFlagArray8(const std::string& name, uint8_t& flags);
     bool StateButton(const char* str_id, const char* label);
+
+    bool BeginMenu(const char* label, bool enabled = true);
 }
 
 #endif /* UIWidgets_hpp */

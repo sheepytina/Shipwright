@@ -182,9 +182,9 @@ extern std::shared_ptr<LUS::GuiWindow> mInputEditorWindow;
 extern std::shared_ptr<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow> mAdvancedResolutionSettingsWindow;
 
 void DrawSettingsMenu() {
-    if (ImGui::BeginMenu("Settings"))
+    if (UIWidgets::BeginMenu("Settings"))
     {
-        if (ImGui::BeginMenu("Audio")) {
+        if (UIWidgets::BeginMenu("Audio")) {
             UIWidgets::PaddedEnhancementSliderFloat("Master Volume: %.1f %%", "##Master_Vol", "gGameMasterVolume", 0.0f, 1.0f, "", 1.0f, true, true, false, true);
             if (UIWidgets::PaddedEnhancementSliderFloat("Main Music Volume: %.1f %%", "##Main_Music_Vol", "gMainMusicVolume", 0.0f, 1.0f, "", 1.0f, true, true, false, true)) {
                 Audio_SetGameVolume(SEQ_BGM_MAIN, CVarGetFloat("gMainMusicVolume", 1.0f));
@@ -229,7 +229,7 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Controller")) {
+        if (UIWidgets::BeginMenu("Controller")) {
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 (12.0f, 6.0f));
             ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.0f));
             ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
@@ -258,7 +258,7 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Graphics")) {
+        if (UIWidgets::BeginMenu("Graphics")) {
         #ifndef __APPLE__
             const bool disabled_resolutionSlider = CVarGetInteger("gAdvancedResolution.VerticalResolutionToggle", 0) &&
                                                    CVarGetInteger("gAdvancedResolution.Enabled", 0);
@@ -500,7 +500,8 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Languages")) {
+            ImGui::Text("Game Language:");
+        if (UIWidgets::BeginMenu("Languages")) {
             UIWidgets::PaddedEnhancementCheckbox("Translate Title Screen", "gTitleScreenTranslation");
             if (UIWidgets::EnhancementRadioButton("English", "gLanguages", LANGUAGE_ENG)) {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
@@ -511,12 +512,15 @@ void DrawSettingsMenu() {
             if (UIWidgets::EnhancementRadioButton("French", "gLanguages", LANGUAGE_FRA)) {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
             }
+
+            ImGui::Text("SoH Menu Language:");
+
             ImGui::EndMenu();
         }
         
         UIWidgets::Spacer(0);
         
-        if (ImGui::BeginMenu("Accessibility")) {
+        if (UIWidgets::BeginMenu("Accessibility")) {
         #if defined(_WIN32) || defined(__APPLE__)
             UIWidgets::PaddedEnhancementCheckbox("Text to Speech", "gA11yTTS");
             UIWidgets::Tooltip("Enables text to speech for in game dialog");
