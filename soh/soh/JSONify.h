@@ -2,7 +2,8 @@
 #include <libultraship/libultraship.h>
 #include <nlohmann/json.hpp>
 
-#define JSONify_Logging
+// Don't ship with this definition enabled.
+// #define JSONify_Logging
 
 namespace JSONify {
 
@@ -20,14 +21,14 @@ class JSONifyClass {
 #endif
 
   public:
+    // key functionality
+    void LoadFile(const char* filename);
+    const char* Replace(const char* id, const char* defaultString);
+
 #ifdef JSONify_Logging
     // logging functions
     void SetLogging(bool foo);
     void LogOutput(const char* id, const char* defaultString);
 #endif
-
-    // key functionality
-    void LoadFile(const char* filename);
-    const char* Replace(const char* id, const char* defaultString);
 };
 } // namespace JSONify

@@ -19,6 +19,9 @@
 
 namespace UIWidgets {
 
+    // MARK: - Localisation
+
+    // Definition of external declaration in header
     jsonify Locale;
 
     // MARK: - Layout Helper

@@ -500,8 +500,9 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-            ImGui::Text("Game Language:");
         if (UIWidgets::BeginMenu("Languages")) {
+            ImGui::Text(UIWidgets::Locale.Replace("Label_GameLanguage", "Game Language:"));
+
             UIWidgets::PaddedEnhancementCheckbox("Translate Title Screen", "gTitleScreenTranslation");
             if (UIWidgets::EnhancementRadioButton("English", "gLanguages", LANGUAGE_ENG)) {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
@@ -513,7 +514,13 @@ void DrawSettingsMenu() {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
             }
 
-            ImGui::Text("SoH Menu Language:");
+            UIWidgets::PaddedSeparator();
+            ImGui::Text(UIWidgets::Locale.Replace("Label_MenuLanguage", "SoH Menu Language:"));
+            // TODO: Add a selector for languages.
+            // TODO: Add a button to load file.
+            // UIWidgets::Locale.LoadFile( /* FILENAME */ );
+
+            UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled");
 
             ImGui::EndMenu();
         }

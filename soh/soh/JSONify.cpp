@@ -7,14 +7,13 @@
 namespace JSONify {
 
 #ifdef JSONify_Logging
-// Start of logging functions
-
+// Logging function
 // Description
 void JSONifyClass::SetLogging(bool foo) {
     logOutputToJson = foo;
 }
 
-// Logging function -
+// Logging function
 // Output any text lookups to a log JSON, with the UID and the default string.
 void JSONifyClass::LogOutput(const char* id, const char* defaultString) {
     if (logOutputToJson) {
@@ -25,7 +24,6 @@ void JSONifyClass::LogOutput(const char* id, const char* defaultString) {
         outfile.close();
     }
 }
-// End of logging functions
 #endif
 
 // Start of key functionality
@@ -48,6 +46,7 @@ const char* JSONifyClass::Replace(const char* id, const char* defaultString) {
     
     return defaultString; // do other things
 }
+
 // End of key functionality
 
 } // namespace JSONify
