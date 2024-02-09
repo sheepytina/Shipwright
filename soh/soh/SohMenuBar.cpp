@@ -501,7 +501,7 @@ void DrawSettingsMenu() {
         UIWidgets::Spacer(0);
 
         if (UIWidgets::BeginMenu("Languages")) {
-            ImGui::Text(UIWidgets::Locale.Replace("Label_GameLanguage", "Game Language:"));
+            ImGui::Text(UIWidgets::Locale.ReplaceString("Label_GameLanguage", "Game Language:").c_str());
 
             UIWidgets::PaddedEnhancementCheckbox("Translate Title Screen", "gTitleScreenTranslation");
             if (UIWidgets::EnhancementRadioButton("English", "gLanguages", LANGUAGE_ENG)) {
@@ -515,12 +515,12 @@ void DrawSettingsMenu() {
             }
 
             UIWidgets::PaddedSeparator();
-            ImGui::Text(UIWidgets::Locale.Replace("Label_MenuLanguage", "SoH Menu Language:"));
+            ImGui::Text(UIWidgets::Locale.ReplaceString("Label_MenuLanguage", "SoH Menu Language:").c_str());
             // TODO: Add a dropdown for languages with the list read from a folder.
             // TODO: Add a button to load file.
             // UIWidgets::Locale.LoadFile( /* FILENAME */ );
 
-            if (UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled")) {
+            if (UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled") && CVarGetInteger("gJSONify.Enabled", 0)) {
                 // temporary: just hardcode the filename for now.
                 UIWidgets::Locale.LoadFile("locale.json");
             }
@@ -1043,7 +1043,7 @@ void DrawEnhancementsMenu() {
                 if (UIWidgets::PaddedEnhancementCheckbox("Use Alternate Assets", "gAltAssets", false, false)) {
                     // The checkbox will flip the alt asset CVar, but we instead want it to change at the end of the game frame
                     // We toggle it back while setting the flag to update the CVar later
-                    CVarSetInteger("gAltAssets", !CVarGetInteger("gAltAssets", 0));
+                    CVarSetInteger("gAltAssets", (bool)!CVarGetInteger("gAltAssets", 0));
                     ToggleAltAssetsAtEndOfFrame = true;
                 }
                 UIWidgets::Tooltip("Toggle between standard assets and alternate assets. Usually mods will indicate if this setting has to be used or not.");

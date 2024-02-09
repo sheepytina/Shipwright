@@ -55,8 +55,26 @@ const char* JSONifyClass::Replace(const char* id, const char* defaultString) {
             // return newString.c_str();
 
             // const char* newString = std::string(n).c_str();
-            //return std::string(n).c_str(); // TODO: that's a pretty serious warning i shouldn't ignore
-            return std::string(n).c_str();
+            return std::string(n).c_str(); // TODO: that's a pretty serious warning i shouldn't ignore
+        }
+    }
+    return defaultString;
+}
+
+// Look up string by ID. Returns a new string if one is found by that ID, otherwise returns default string.
+// Returns string type instead of a char pointer.
+std::string JSONifyClass::ReplaceString(const char* id, const char* defaultString) {
+#ifdef JSONify_Logging
+    LogOutput(id, defaultString);
+#endif
+    if (!CVarGetInteger("gJSONify.Enabled", 0)) {
+        return defaultString;
+    }
+
+    if (jsonData.contains(id)) {
+        json n = jsonData[id];
+        if (n.is_string() && !n.get<std::string>().empty()) {
+            return std::string(n);
         }
     }
     return defaultString;

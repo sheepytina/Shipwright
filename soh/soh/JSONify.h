@@ -24,6 +24,7 @@ class JSONifyClass {
     // key functionality
     void LoadFile(const char* filename);
     const char* Replace(const char* id, const char* defaultString);
+    std::string ReplaceString(const char* id, const char* defaultString);
 
 #ifdef JSONify_Logging
     // logging functions

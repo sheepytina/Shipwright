@@ -212,7 +212,7 @@ namespace UIWidgets {
         }
 
         bool val = (bool)CVarGetInteger(cvarName, defaultValue);
-        if (CustomCheckbox(Locale.Replace(identifier.c_str(), text), &val, disabled, disabledGraphic)) {
+        if (CustomCheckbox(Locale.ReplaceString(identifier.c_str(), text).c_str(), &val, disabled, disabledGraphic)) {
             CVarSetInteger(cvarName, val);
             LUS::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
             changed = true;
@@ -310,7 +310,7 @@ namespace UIWidgets {
             DisableComponent(ImGui::GetStyle().Alpha * 0.5f);
         }
 
-        ImGui::Text(Locale.Replace(identifier.c_str(), text), val);
+        ImGui::Text(Locale.ReplaceString(identifier.c_str(), text).c_str(), val);
         Spacer(0);
 
         ImGui::BeginGroup();
@@ -408,9 +408,9 @@ namespace UIWidgets {
         }
 
         if (!isPercentage) {
-            ImGui::Text(Locale.Replace(identifier.c_str(), text), val);
+            ImGui::Text(Locale.ReplaceString(identifier.c_str(), text).c_str(), val);
         } else {
-            ImGui::Text(Locale.Replace(identifier.c_str(), text), val * 100.0f);
+            ImGui::Text(Locale.ReplaceString(identifier.c_str(), text).c_str(), val * 100.0f);
         }
         Spacer(0);
 
@@ -515,7 +515,7 @@ namespace UIWidgets {
             ret = true;
         }
         ImGui::SameLine();
-        ImGui::Text("%s", Locale.Replace(identifier.c_str(), text));
+        ImGui::Text("%s", Locale.ReplaceString(identifier.c_str(), text).c_str());
         
         return ret;
     }
@@ -523,7 +523,7 @@ namespace UIWidgets {
     bool DrawResetColorButton(const char* cvarName, ImVec4* colors, ImVec4 defaultcolors, bool has_alpha) {
         bool changed = false;
         std::string Cvar_RBM = std::string(cvarName) + "RBM";
-        std::string Label = std::string(Locale.Replace("ColorLabel_Reset", "Reset"));
+        std::string Label = std::string(Locale.ReplaceString("ColorLabel_Reset", "Reset").c_str());
         std::string MakeInvisible = Label + "##" + std::string(cvarName) + "Reset";
         if (ImGui::Button(MakeInvisible.c_str())) {
             colors->x = defaultcolors.x;
@@ -550,7 +550,7 @@ namespace UIWidgets {
         bool changed = false;
         Color_RGBA8 NewColors = {0,0,0,255};
         std::string Cvar_RBM = std::string(cvarName) + "RBM";
-        std::string Label = std::string(Locale.Replace("ColorLabel_Random", "Random"));
+        std::string Label = std::string(Locale.ReplaceString("ColorLabel_Random", "Random").c_str());
         std::string FullName = Label + "##" + std::string(cvarName) + "Random";
         if (ImGui::Button(FullName.c_str())) {
 #if defined(__SWITCH__) || defined(__WIIU__)
@@ -575,7 +575,7 @@ namespace UIWidgets {
     void DrawLockColorCheckbox(const char* cvarName) {
         std::string Cvar_Lock = std::string(cvarName) + "Lock";
         s32 lock = CVarGetInteger(Cvar_Lock.c_str(), 0);
-        std::string Label = std::string(Locale.Replace("ColorLabel_Lock", "Lock"));
+        std::string Label = std::string(Locale.ReplaceString("ColorLabel_Lock", "Lock").c_str());
         std::string FullName = Label + "##" + Cvar_Lock;
         EnhancementCheckbox(FullName.c_str(), Cvar_Lock.c_str());
         Tooltip("Prevents this color from being changed upon selecting \"Randomize all\"");
@@ -583,7 +583,7 @@ namespace UIWidgets {
 
     void RainbowColor(const char* cvarName, ImVec4* colors) {
         std::string Cvar_RBM = std::string(cvarName) + "RBM";
-        std::string Label = std::string(Locale.Replace("ColorLabel_Rainbow", "Rainbow"));
+        std::string Label = std::string(Locale.ReplaceString("ColorLabel_Rainbow", "Rainbow").c_str());
         std::string MakeInvisible = Label + "##" + std::string(cvarName) + "Rainbow";
 
         EnhancementCheckbox(MakeInvisible.c_str(), Cvar_RBM.c_str());
@@ -613,7 +613,7 @@ namespace UIWidgets {
         ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
 
         if (!TitleSameLine) {
-            ImGui::Text("%s", Locale.Replace(identifier.c_str(), text));
+            ImGui::Text("%s", Locale.ReplaceString(identifier.c_str(), text).c_str());
             flags = ImGuiColorEditFlags_NoLabel;
         }
 
@@ -785,6 +785,6 @@ namespace UIWidgets {
     bool BeginMenu(const char* label, bool enabled) {
         char identifier[] = "MenuItem_";
         strcat(identifier, label);
-        return ImGui::BeginMenu(Locale.Replace(identifier, label), enabled);
+        return ImGui::BeginMenu(Locale.ReplaceString(identifier, label).c_str(), enabled);
     }
 }
