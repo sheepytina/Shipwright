@@ -516,11 +516,14 @@ void DrawSettingsMenu() {
 
             UIWidgets::PaddedSeparator();
             ImGui::Text(UIWidgets::Locale.Replace("Label_MenuLanguage", "SoH Menu Language:"));
-            // TODO: Add a selector for languages.
+            // TODO: Add a dropdown for languages with the list read from a folder.
             // TODO: Add a button to load file.
             // UIWidgets::Locale.LoadFile( /* FILENAME */ );
 
-            UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled");
+            if (UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled")) {
+                // temporary: just hardcode the filename for now.
+                UIWidgets::Locale.LoadFile("locale.json");
+            }
 
             ImGui::EndMenu();
         }

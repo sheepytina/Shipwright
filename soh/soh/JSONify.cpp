@@ -26,11 +26,15 @@ void JSONifyClass::LogOutput(const char* id, const char* defaultString) {
 }
 #endif
 
-// Start of key functionality
-
-// Read in a JSON file by filename.
+// Load a JSON file by filename and keep the contents in memory.
 void JSONifyClass::LoadFile(const char* foo) {
+
+    // TODO: consider using filesystem here
+
     std::ifstream infile(foo);
+    if (!infile) {
+        return;
+    }
     jsonData = json::parse(infile);
     infile.close();
 }
@@ -43,10 +47,19 @@ const char* JSONifyClass::Replace(const char* id, const char* defaultString) {
     if (!CVarGetInteger("gJSONify.Enabled", 0)) {
         return defaultString;
     }
-    
-    return defaultString; // do other things
-}
 
-// End of key functionality
+    if (jsonData.contains(id)) {
+        json n = jsonData[id];
+        if (n.is_string() && !n.get<std::string>().empty()) {
+            // std::string newString = n;
+            // return newString.c_str();
+
+            // const char* newString = std::string(n).c_str();
+            //return std::string(n).c_str(); // TODO: that's a pretty serious warning i shouldn't ignore
+            return std::string(n).c_str();
+        }
+    }
+    return defaultString;
+}
 
 } // namespace JSONify
