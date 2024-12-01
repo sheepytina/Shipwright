@@ -229,9 +229,9 @@ extern std::shared_ptr<InputViewerSettingsWindow> mInputViewerSettings;
 extern std::shared_ptr<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow> mAdvancedResolutionSettingsWindow;
 
 void DrawSettingsMenu() {
-    if (ImGui::BeginMenu("Settings"))
+    if (UIWidgets::BeginMenu("Settings"))
     {
-        if (ImGui::BeginMenu("Audio")) {
+        if (UIWidgets::BeginMenu("Audio")) {
             UIWidgets::PaddedEnhancementSliderFloat("Master Volume: %.1f %%", "##Master_Vol", CVAR_SETTING("Volume.Master"), 0.0f, 1.0f, "", 1.0f, true, true, false, true);
             if (UIWidgets::PaddedEnhancementSliderFloat("Main Music Volume: %.1f %%", "##Main_Music_Vol", CVAR_SETTING("Volume.MainMusic"), 0.0f, 1.0f, "", 1.0f, true, true, false, true)) {
                 Audio_SetGameVolume(SEQ_PLAYER_BGM_MAIN, CVarGetFloat(CVAR_SETTING("Volume.MainMusic"), 1.0f));
@@ -275,7 +275,7 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Controller")) {
+        if (UIWidgets::BeginMenu("Controller")) {
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 (12.0f, 6.0f));
             ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.0f));
             ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
@@ -318,7 +318,7 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Graphics")) {
+        if (UIWidgets::BeginMenu("Graphics")) {
         #ifndef __APPLE__
             const bool disabled_resolutionSlider = CVarGetInteger(CVAR_PREFIX_ADVANCED_RESOLUTION ".VerticalResolutionToggle", 0) &&
                                                    CVarGetInteger(CVAR_PREFIX_ADVANCED_RESOLUTION ".Enabled", 0);
@@ -544,7 +544,9 @@ void DrawSettingsMenu() {
 
         UIWidgets::Spacer(0);
 
-        if (ImGui::BeginMenu("Languages")) {
+        if (UIWidgets::BeginMenu("Languages")) {
+            ImGui::Text(UIWidgets::Locale.ReplaceString("Label_GameLanguage", "Game Language:").c_str());
+
             UIWidgets::PaddedEnhancementCheckbox("Translate Title Screen", CVAR_SETTING("TitleScreenTranslation"));
             if (UIWidgets::EnhancementRadioButton("English", CVAR_SETTING("Languages"), LANGUAGE_ENG)) {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
@@ -555,12 +557,24 @@ void DrawSettingsMenu() {
             if (UIWidgets::EnhancementRadioButton("French", CVAR_SETTING("Languages"), LANGUAGE_FRA)) {
                 GameInteractor::Instance->ExecuteHooks<GameInteractor::OnSetGameLanguage>();
             }
+
+            UIWidgets::PaddedSeparator();
+            ImGui::Text(UIWidgets::Locale.ReplaceString("Label_MenuLanguage", "SoH Menu Language:").c_str());
+            // TODO: Add a dropdown for languages with the list read from a folder.
+            // TODO: Add a button to load file.
+            // UIWidgets::Locale.LoadFile( /* FILENAME */ );
+
+            if (UIWidgets::PaddedEnhancementCheckbox("Use localisation file", "gJSONify.Enabled") && CVarGetInteger("gJSONify.Enabled", 0)) {
+                // temporary: just hardcode the filename for now.
+                UIWidgets::Locale.LoadFile("locale.json");
+            }
+
             ImGui::EndMenu();
         }
         
         UIWidgets::Spacer(0);
         
-        if (ImGui::BeginMenu("Accessibility")) {
+        if (UIWidgets::BeginMenu("Accessibility")) {
         #if defined(_WIN32) || defined(__APPLE__)
             UIWidgets::PaddedEnhancementCheckbox("Text to Speech", CVAR_SETTING("A11yTTS"));
             UIWidgets::Tooltip("Enables text to speech for in game dialog");
