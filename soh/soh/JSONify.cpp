@@ -2,6 +2,7 @@
 // Description: Text lookup/replacement. Localisation support for UIWidgets et al.
 
 #include "JSONify.h"
+#include <libultraship/libultraship.h>
 #include <fstream>
 
 namespace JSONify {
