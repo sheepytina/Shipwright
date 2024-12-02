@@ -3,6 +3,7 @@
 
 #include "JSONify.h"
 #include <fstream>
+#include <libultraship/libultraship.h>
 
 namespace JSONify {
 

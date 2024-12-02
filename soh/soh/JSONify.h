@@ -1,5 +1,4 @@
 #pragma once
-#include <libultraship/libultraship.h>
 #include <nlohmann/json.hpp>
 
 // Don't ship with this definition enabled.
